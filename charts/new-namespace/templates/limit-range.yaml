@@ -6,4 +6,4 @@ metadata:
 spec:
   limits:
     - type: Container
-      {{- toYaml .Values.limits | nnindent6 }}
+      {{- toYaml .Values.limits | nindent6 }}
