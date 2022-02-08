@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: {{ include "new-namespace.fullname" . }}-resource-quota
+  namespace: {{ include "new-namespace.fullname" . }}
+spec:
+  hard:
+    {{- toYaml .Values.resourceQuota | nindent 4 }}

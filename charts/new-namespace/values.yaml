@@ -1,0 +1,30 @@
+# Default values for new-namespace.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+nameOverride: ""
+fullnameOverride: ""
+
+resourceQuota:
+  requests.storage: "15Gi"
+  requests.cpu: "5"
+  requests.memory: 17Gi
+  limits.cpu: "17"
+  limits.memory: 25Gi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+limits:
+  default:
+    cpu: 150m
+    memory: 900Mi
+  defaultRequest:
+    cpu: 100m
+    memory: 600Mi
+  max:
+    cpu: 1
+    memory: 2100Mi
