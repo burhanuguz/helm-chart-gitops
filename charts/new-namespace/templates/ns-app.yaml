@@ -1,6 +1,6 @@
 kind: Application
 metadata:
-  name: {{ include "new-namespace.fullname" . }}
+  name: {{ include "new-namespace.fullname" . }}-extend
   namespace: openshift-gitops
 spec:
   destination:
