@@ -5,7 +5,5 @@ metadata:
   namespace: {{ include "new-namespace.fullname" . }}
 spec:
   limits:
-  - name: resource-limits
-    limit:
-      - type: Container
-        {{- toYaml .Values.limits | nindent 8 }}
+    - type: Container
+      {{- toYaml .Values.limits | nnindent6 }}
