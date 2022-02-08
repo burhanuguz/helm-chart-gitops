@@ -4,6 +4,7 @@
 
 nameOverride: ""
 fullnameOverride: ""
+mainRepo: ""
 
 resourceQuota:
   requests.storage: "15Gi"
