@@ -1,0 +1,20 @@
+kind: Application
+metadata:
+  name: {{ include "new-namespace.fullname" . }}
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: {{ include "new-namespace.fullname" . }}
+  project: default
+  source:
+    path: {{ include "new-namespace.fullname" . }}
+    repoURL: {{ .Values.mainRepo }}
+    targetRevision: master
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      backoff:
+        duration: 5s
