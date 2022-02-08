@@ -9,6 +9,6 @@ entries:
     name: new-namespace
     type: application
     urls:
-    - https://github.com/burhanuguz/helm-chart-gitops/new-namespace-0.1.0.tgz
+    - https://burhanuguz.github.io/helm-chart-gitops/new-namespace-0.1.0.tgz
     version: 0.1.0
 generated: "2022-02-08T15:38:02.171125507Z"
