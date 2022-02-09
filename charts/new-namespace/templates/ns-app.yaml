@@ -11,7 +11,7 @@ spec:
   source:
     path: {{ include "new-namespace.fullname" . }}
     repoURL: {{ .Values.mainRepo }}
-    targetRevision: master
+    targetRevision: cluster-apps
   syncPolicy:
     automated:
       prune: true
