@@ -29,3 +29,12 @@ limits:
   max:
     cpu: 1
     memory: 2100Mi
+
+conjur:
+  enabled: true
+
+conjurConnectionConfig:
+  CONJUR_APPLIANCE_URL: ''
+  CONJUR_ACCOUNT: ""
+  CONJUR_AUTHN_TOKEN_FILE: ""
+  CONJUR_SSL_CERTIFICATE: ""
