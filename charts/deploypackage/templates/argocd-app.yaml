@@ -1,0 +1,22 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: "{{ include "deploypackage.fullname" . }}-extend"
+  namespace: openshift-gitops
+spec:
+  destination:
+    server: 'https://kubernetes.default.svc'
+    namespace: {{ include "deploypackage.fullname" . }}
+  project: default
+  source:
+    path: $ARGOCD_APP_NAMESPACE/{{ include "deploypackage.fullname" . }}
+    repoURL: $ARGOCD_APP_SOURCE_REPO_URL 
+    targetRevision: $ARGOCD_APP_SOURCE_TARGET_REVISION 
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    retry:
+      backoff:
+        duration: 5s
+

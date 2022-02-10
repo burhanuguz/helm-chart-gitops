@@ -1,0 +1,116 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "deploypackage.fullname" . }}
+  labels:
+    {{- include "deploypackage.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "deploypackage.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      annotations:
+        {{- toYaml .Values.podAnnotations | nindent 8 }}
+      {{- if .Values.istio.enabled }}
+        sidecar.istio.io/inject: "true"
+      {{- end }}
+      labels:
+        {{- include "deploypackage.selectorLabels" . | nindent 8 }}
+    spec:
+      serviceAccountName: {{ include "deploypackage.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      initContainers:
+      {{- with .Values.initContainers }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- if and .Values.conjur.enabled (deepEqual "init" .Values.conjur.mode) }}
+        - name: {{ .Values.conjur.conjurContainerName }}
+          image: {{ .Values.conjur.containerImage }}
+          {{- toYaml .Values.conjurContainerConfig | nindent 10 }}
+            - name: CONTAINER_MODE
+              value: "init"
+            - name: CONJUR_AUTHN_URL
+              value: {{ .Values.conjur.CONJUR_AUTHN_URL }}
+            - name: CONJUR_AUTHN_LOGIN
+              value: {{ .Values.conjur.CONJUR_AUTHN_LOGIN }}
+      {{- end }}
+      containers:
+      {{- if and .Values.conjur.enabled (deepEqual "sidecar" .Values.conjur.mode) }}
+        - name: {{ .Values.conjur.conjurContainerName }}
+          image: {{ .Values.conjur.containerImage }}
+          {{- toYaml .Values.conjurContainerConfig | nindent 10 }}
+            - name: CONTAINER_MODE
+              value: "sidecar"
+            - name: CONJUR_AUTHN_URL
+              value: {{ .Values.conjur.CONJUR_AUTHN_URL }}
+            - name: CONJUR_AUTHN_LOGIN
+              value: {{ .Values.conjur.CONJUR_AUTHN_LOGIN }}
+      {{- end }}
+        {{- toYaml .Values.sidecarContainers | nindent 8 }}
+        - name: {{ include "deploypackage.fullname" . }}
+          {{- with .Values.extraFields }}
+            {{- toYaml . | nindent 10 }}
+          {{- end }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          envFrom:
+          {{- toYaml .Values.envFrom | nindent 10 }}
+          {{- if .Values.conjurConfigMap }}
+          - configMapRef:
+              name: conjur-connection
+          {{- end }}
+          {{- toYaml .Values.envFrom | nindent 10 }}
+          env:
+          {{- toYaml .Values.env | nindent 10 }}
+          {{- with .Values.ports }}
+          ports:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          volumeMounts:
+            {{- toYaml .Values.volumeMounts | nindent 12 }}
+          {{- if .Values.conjur.enabled }}
+            - name: conjur-access-token
+              mountPath: /run/conjur
+          {{- end }}
+          {{- toYaml .Values.extras | nindent 10 }}
+      volumes:
+        {{- toYaml .Values.volumes | nindent 8 }}
+      {{- if .Values.conjur.enabled }}
+        - name: conjur-access-token
+          emptyDir:
+            medium: Memory
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+
