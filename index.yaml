@@ -3,12 +3,22 @@ entries:
   new-namespace:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-02-08T15:38:02.180705519Z"
+    created: "2022-02-10T09:24:48.639982414Z"
     description: A Helm chart for Kubernetes
-    digest: be2467d62339d23da20edbbdf551aa844e7dcab74c70ba4669c547067ea3786f
+    digest: b1cbd0a4e6ab8f7cb39328063c3ca9710dd78b4b5db5f5f39c85b8abed4f0bf1
+    name: new-namespace
+    type: application
+    urls:
+    - https://burhanuguz.github.io/helm-chart-gitops/new-namespace-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-02-10T09:24:48.639601969Z"
+    description: A Helm chart for Kubernetes
+    digest: 59908727c648c5e8614be29937b6c777c63f7b5c1ce3466d5cbf35d3d87b645c
     name: new-namespace
     type: application
     urls:
     - https://burhanuguz.github.io/helm-chart-gitops/new-namespace-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-08T15:38:02.171125507Z"
+generated: "2022-02-10T09:24:48.639063943Z"
