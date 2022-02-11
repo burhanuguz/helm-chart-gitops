@@ -45,12 +45,12 @@ spec:
           {{- toYaml .Values.conjurContainerConfig.env | nindent 10 }}
           - name: CONTAINER_MODE
             value: "init"
+          - name: authnName
+            value: {{ .Values.conjur.authnName }}
           - name: CONJUR_AUTHN_URL
             value: {{ .Values.conjur.CONJUR_AUTHN_URL }}
           - name: CONJUR_AUTHN_LOGIN
             value: {{ .Values.conjur.CONJUR_AUTHN_LOGIN }}
-          - name: authnName
-            value: {{ .Values.conjur.authnName }}
       {{- end }}
       containers:
       {{- if and .Values.conjur.enabled (deepEqual "sidecar" .Values.conjur.mode) }}
