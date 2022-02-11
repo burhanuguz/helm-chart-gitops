@@ -14,9 +14,11 @@ spec:
   template:
     metadata:
       annotations:
-        {{- toYaml .Values.podAnnotations | nindent 8 }}
       {{- if .Values.istio.enabled }}
         sidecar.istio.io/inject: "true"
+      {{- end }}
+      {{- with .Values.podAnnotations }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
       labels:
         {{- include "deploypackage.selectorLabels" . | nindent 8 }}
@@ -35,27 +37,43 @@ spec:
       {{- if and .Values.conjur.enabled (deepEqual "init" .Values.conjur.mode) }}
         - name: {{ .Values.conjur.conjurContainerName }}
           image: {{ .Values.conjur.containerImage }}
-          {{- toYaml .Values.conjurContainerConfig | nindent 10 }}
-            - name: CONTAINER_MODE
-              value: "init"
-            - name: CONJUR_AUTHN_URL
-              value: {{ .Values.conjur.CONJUR_AUTHN_URL }}
-            - name: CONJUR_AUTHN_LOGIN
-              value: {{ .Values.conjur.CONJUR_AUTHN_LOGIN }}
+          envFrom:
+          {{- toYaml .Values.conjurContainerConfig.envFrom | nindent 10 }}
+          volumeMounts:
+          {{- toYaml .Values.conjurContainerConfig.volumeMounts | nindent 10 }}
+          env:
+          {{- toYaml .Values.conjurContainerConfig.env | nindent 10 }}
+          - name: CONTAINER_MODE
+            value: "init"
+          - name: CONJUR_AUTHN_URL
+            value: {{ .Values.conjur.CONJUR_AUTHN_URL }}
+          - name: CONJUR_AUTHN_LOGIN
+            value: {{ .Values.conjur.CONJUR_AUTHN_LOGIN }}
+          - name: authnName
+            value: {{ .Values.conjur.authnName }}
       {{- end }}
       containers:
       {{- if and .Values.conjur.enabled (deepEqual "sidecar" .Values.conjur.mode) }}
         - name: {{ .Values.conjur.conjurContainerName }}
           image: {{ .Values.conjur.containerImage }}
-          {{- toYaml .Values.conjurContainerConfig | nindent 10 }}
-            - name: CONTAINER_MODE
-              value: "sidecar"
-            - name: CONJUR_AUTHN_URL
-              value: {{ .Values.conjur.CONJUR_AUTHN_URL }}
-            - name: CONJUR_AUTHN_LOGIN
-              value: {{ .Values.conjur.CONJUR_AUTHN_LOGIN }}
+          envFrom:
+          {{- toYaml .Values.conjurContainerConfig.envFrom | nindent 10 }}
+          volumeMounts:
+          {{- toYaml .Values.conjurContainerConfig.volumeMounts | nindent 10 }}
+          env:
+          {{- toYaml .Values.conjurContainerConfig.env | nindent 10 }}
+          - name: CONTAINER_MODE
+            value: "sidecar"
+          - name: CONJUR_AUTHN_URL
+            value: {{ .Values.conjur.CONJUR_AUTHN_URL }}
+          - name: CONJUR_AUTHN_LOGIN
+            value: {{ .Values.conjur.CONJUR_AUTHN_LOGIN }}
+          - name: authnName
+            value: {{ .Values.conjur.authnName }}
       {{- end }}
-        {{- toYaml .Values.sidecarContainers | nindent 8 }}
+      {{- with .Values.sidecarContainers }}
+          {{- toYaml . | nindent 8 }}
+      {{- end }}       
         - name: {{ include "deploypackage.fullname" . }}
           {{- with .Values.extraFields }}
             {{- toYaml . | nindent 10 }}
@@ -65,14 +83,17 @@ spec:
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           envFrom:
-          {{- toYaml .Values.envFrom | nindent 10 }}
-          {{- if .Values.conjurConfigMap }}
-          - configMapRef:
-              name: conjur-connection
+          {{- with .Values.envFrom }}
+            {{- toYaml . | nindent 12 }}
           {{- end }}
-          {{- toYaml .Values.envFrom | nindent 10 }}
+          {{- if .Values.conjur.enabled }}
+            - configMapRef:
+                name: conjur-connection
+          {{- end }}
           env:
-          {{- toYaml .Values.env | nindent 10 }}
+          {{- with .Values.env }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- with .Values.ports }}
           ports:
             {{- toYaml . | nindent 12 }}
@@ -88,14 +109,20 @@ spec:
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
           volumeMounts:
-            {{- toYaml .Values.volumeMounts | nindent 12 }}
+          {{- with .Values.volumeMounts }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
           {{- if .Values.conjur.enabled }}
             - name: conjur-access-token
               mountPath: /run/conjur
           {{- end }}
-          {{- toYaml .Values.extras | nindent 10 }}
+        {{- with .Values.extras }}
+          {{- toYaml . | nindent 10 }}
+        {{- end }}
       volumes:
-        {{- toYaml .Values.volumes | nindent 8 }}
+      {{- with .Values.volumes }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       {{- if .Values.conjur.enabled }}
         - name: conjur-access-token
           emptyDir:
