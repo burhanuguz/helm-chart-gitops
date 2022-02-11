@@ -10,8 +10,8 @@ spec:
   project: default
   source:
     path: {{ .Release.Namespace }}/{{ include "deploypackage.fullname" . }}
-    repoURL: {{ include "deploypackage.mainRepo" . }}
-    targetRevision: {{ include "deploypackage.mainRevision" . }}
+    repoURL: {{ .Values.mainRepo }}
+    targetRevision: {{ .Values.mainRevision }}
   syncPolicy:
     automated:
       prune: true
