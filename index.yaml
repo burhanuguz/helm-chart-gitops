@@ -3,20 +3,40 @@ entries:
   deploypackage:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-02-10T14:17:21.923129437Z"
+    created: "2022-02-11T14:50:46.215324347Z"
     description: A Helm chart for Kubernetes
-    digest: 16100f31ff079178205063771432ec28a059952b9126f904a0de2949f914bdd8
+    digest: ce446e11049f7015d46b0b8236121a328831c5200bebae118469b035aa4dc4ad
+    name: deploypackage
+    type: application
+    urls:
+    - https://burhanuguz.github.io/helm-chart-gitops/deploypackage-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-02-11T14:50:46.214405292Z"
+    description: A Helm chart for Kubernetes
+    digest: aa463b87edab4b2f08c930a1278897f929642dd4660d3aa1126ef628fd95d19e
     name: deploypackage
     type: application
     urls:
     - https://burhanuguz.github.io/helm-chart-gitops/deploypackage-0.1.0.tgz
     version: 0.1.0
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-02-11T14:50:46.216647011Z"
+    description: A Helm chart for Kubernetes
+    digest: 8cddac91b3e4365724866872817a6418875f2f47f8d557d5cb705a483a1d2b7f
+    name: deploypackage
+    type: application
+    urls:
+    - https://burhanuguz.github.io/helm-chart-gitops/helm-chart-gitops/deploypackage-0.1.0.tgz
+    version: 0.1.0
   new-namespace:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-02-10T14:17:21.924118858Z"
+    created: "2022-02-11T14:50:46.216031048Z"
     description: A Helm chart for Kubernetes
-    digest: f02e9068a869a6ed0cf08926fd851fd05023b93783f1637a46ceefeb54aa0b72
+    digest: e2ae5cd1c868991a1db6583fe3f427afc8c12779144369236ae6c0cdd8eedf7b
     name: new-namespace
     type: application
     urls:
@@ -24,7 +44,17 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-02-10T14:17:21.923606265Z"
+    created: "2022-02-11T14:50:46.217292871Z"
+    description: A Helm chart for Kubernetes
+    digest: e2ae5cd1c868991a1db6583fe3f427afc8c12779144369236ae6c0cdd8eedf7b
+    name: new-namespace
+    type: application
+    urls:
+    - https://burhanuguz.github.io/helm-chart-gitops/helm-chart-gitops/new-namespace-0.1.1.tgz
+    version: 0.1.1
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-02-11T14:50:46.215630291Z"
     description: A Helm chart for Kubernetes
     digest: 59908727c648c5e8614be29937b6c777c63f7b5c1ce3466d5cbf35d3d87b645c
     name: new-namespace
@@ -32,4 +62,14 @@ entries:
     urls:
     - https://burhanuguz.github.io/helm-chart-gitops/new-namespace-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-10T14:17:21.921739726Z"
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-02-11T14:50:46.216990552Z"
+    description: A Helm chart for Kubernetes
+    digest: 59908727c648c5e8614be29937b6c777c63f7b5c1ce3466d5cbf35d3d87b645c
+    name: new-namespace
+    type: application
+    urls:
+    - https://burhanuguz.github.io/helm-chart-gitops/helm-chart-gitops/new-namespace-0.1.0.tgz
+    version: 0.1.0
+generated: "2022-02-11T14:50:46.213283872Z"
