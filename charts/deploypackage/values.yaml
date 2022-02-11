@@ -132,7 +132,7 @@ conjurContainerConfig:
       mountPath: /run/conjur
   envFrom:
   - configMapRef:
-      name: conjur-connect
+      name: conjur-connection
   env:
     - name: MY_POD_NAME
       valueFrom:
