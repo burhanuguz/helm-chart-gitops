@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: "{{ include "deploypackage.fullname" . }}-extend"
+  name: {{ include "deploypackage.fullname" . }}-extend
   namespace: openshift-gitops
 spec:
   destination:
@@ -9,9 +9,9 @@ spec:
     namespace: {{ include "deploypackage.fullname" . }}
   project: default
   source:
-    path: $ARGOCD_APP_NAMESPACE/{{ include "deploypackage.fullname" . }}
-    repoURL: $ARGOCD_APP_SOURCE_REPO_URL 
-    targetRevision: $ARGOCD_APP_SOURCE_TARGET_REVISION 
+    path: {{ include "deploypackage.namespace" . }}/{{ include "deploypackage.fullname" . }}
+    repoURL: {{ include "deploypackage.mainRepo" . }}
+    targetRevision: {{ include "deploypackage.mainRevision" . }}
   syncPolicy:
     automated:
       prune: true
@@ -19,4 +19,3 @@ spec:
     retry:
       backoff:
         duration: 5s
-
