@@ -11,8 +11,13 @@ image:
   tag: ""
 
 imagePullSecrets: []
+
 nameOverride: ""
+
 fullnameOverride: ""
+
+istio:
+  enabled: false
 
 serviceAccount:
   # Specifies whether a service account should be created
@@ -148,4 +153,5 @@ conjurContainerConfig:
 initContainers: []
 
 sidecarContainers: []
+
 
