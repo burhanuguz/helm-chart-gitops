@@ -1,7 +1,7 @@
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
-  name: {{ include "new-namespace.fullname" . }}-extend
+  name: {{ include "new-namespace.fullname" . }}-apps
   namespace: openshift-gitops
 spec:
   destination:
