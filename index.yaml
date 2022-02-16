@@ -3,9 +3,19 @@ entries:
   deploypackage:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-02-11T23:40:47.555274+03:00"
+    created: "2022-02-16T06:31:22.644921021Z"
     description: A Helm chart for Kubernetes
-    digest: ff33fd07112777145a85061986b6f6a32a86e118d4f19a4ed5d0e239a739b37f
+    digest: 5592fcda760be8a868d66aac4731ce7c4f483355f8cb9ec97b042cf1b49d31a0
+    name: deploypackage
+    type: application
+    urls:
+    - https://burhanuguz.github.io/helm-chart-gitops/deploypackage-0.1.2.tgz
+    version: 0.1.2
+  - apiVersion: v2
+    appVersion: 1.16.0
+    created: "2022-02-16T06:31:22.644042806Z"
+    description: A Helm chart for Kubernetes
+    digest: 0562de5a3d231a9e0b9f44af7cf462e72bf53f90a313dec9feac26d0d1110f8b
     name: deploypackage
     type: application
     urls:
@@ -13,7 +23,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-02-11T23:40:47.5545244+03:00"
+    created: "2022-02-16T06:31:22.642996472Z"
     description: A Helm chart for Kubernetes
     digest: aa463b87edab4b2f08c930a1278897f929642dd4660d3aa1126ef628fd95d19e
     name: deploypackage
@@ -24,7 +34,7 @@ entries:
   new-namespace:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-02-11T23:40:47.556025+03:00"
+    created: "2022-02-16T06:31:22.646427614Z"
     description: A Helm chart for Kubernetes
     digest: 923a0c9e4624e6270bad76fabbd3e4f777c7a860708516f8b171025b3031862b
     name: new-namespace
@@ -34,7 +44,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-02-11T23:40:47.555274+03:00"
+    created: "2022-02-16T06:31:22.64576701Z"
     description: A Helm chart for Kubernetes
     digest: 59908727c648c5e8614be29937b6c777c63f7b5c1ce3466d5cbf35d3d87b645c
     name: new-namespace
@@ -42,4 +52,4 @@ entries:
     urls:
     - https://burhanuguz.github.io/helm-chart-gitops/new-namespace-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-11T23:40:47.5492737+03:00"
+generated: "2022-02-16T06:31:22.641567097Z"
