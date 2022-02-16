@@ -42,7 +42,7 @@ spec:
         {{- toYaml .Values.conjurContainerConfig | nindent 8 }}
       {{- end }}
       {{- with .Values.sidecarContainers }}
-          {{- toYaml . | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
       {{- end }}
         - name: {{ include "deploypackage.fullname" . }}
           {{- with .Values.extraFields }}
