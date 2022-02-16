@@ -41,34 +41,58 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
-ports: []
-#  - name: &referencedPort http
-#    containerPort: 8080
-#    protocol: TCP
-#  - name: debug
-#    containerPort: 5005
-#    protocol: TCP
+ports:
+   - name: &referencedPortName http
+     containerPort: &referencedPort 8080
+     protocol: TCP
+  # - name: debug
+  #   containerPort: 5005
+  #   protocol: TCP
 
 livenessProbe: []
-#  httpGet:
-#    path: /
-#    port: http
+  # httpGet:
+  #   path: /
+  #   port: *referencedPortName
+  # failureThreshold: 10
+  # initialDelaySeconds: 5
+  # periodSeconds: 10
+  # successThreshold: 1
+####### OR #######
+  # tcpSocket:
+  #   port: *referencedPortName
+  # failureThreshold: 10
+  # initialDelaySeconds: 5
+  # periodSeconds: 10
+  # successThreshold: 1
 
 readinessProbe: []
-#  httpGet:
-#    path: /
-#    port: http
+  # httpGet:
+  #   path: /
+  #   port: *referencedPortName
+  # failureThreshold: 10
+  # initialDelaySeconds: 5
+  # periodSeconds: 10
+  # successThreshold: 1
+####### OR #######
+  # tcpSocket:
+  #   port: *referencedPortName
+  # failureThreshold: 10
+  # initialDelaySeconds: 5
+  # periodSeconds: 10
+  # successThreshold: 1
 
-service: []
-#  type: ClusterIP
-#  ports:
-#  - port: 8080
-#    targetPort: http
-#    protocol: TCP
-#    name: http
+
+service:
+  type: ClusterIP
+  ports:
+  - port: *referencedPort
+    targetPort: *referencedPortName
+    protocol: TCP
+    name: *referencedPortName
 
 route:
   enabled: true
+  targetServicePort: *referencedPortName
 
 # ingress:
 #   enabled: false
@@ -123,36 +147,46 @@ extras: []
 
 conjur:
   enabled: false
-  mode: "init"
-  authnName: ""
-  CONJUR_AUTHN_URL: '$(CONJUR_APPLIANCE_URL)/api/authn-k8s/$(authnName)'
-  CONJUR_AUTHN_LOGIN: ""
-  conjurContainerName: "authenticator"
-  containerImage: "cyberark/conjur-authn-k8s-client"
+  mode: &conjurMode "init"
+  authnName: &conjurAuthnName ""
+  CONJUR_AUTHN_URL: &conjurAuthnUrl '$(CONJUR_APPLIANCE_URL)/api/authn-k8s/$(authnName)'
+  CONJUR_AUTHN_LOGIN: &conjurAuthnLogin ""
+  conjurContainerName: &conjurContainerName "authenticator"
+  containerImage: &containerImage "cyberark/conjur-authn-k8s-client"
 
-conjurContainerConfig: []
-  volumeMounts:
-    - name: conjur-access-token
-      mountPath: /run/conjur
-  envFrom:
-  - configMapRef:
-      name: conjur-connection
-  env:
-    - name: MY_POD_NAME
-      valueFrom:
-        fieldRef:
-          apiVersion: v1
-          fieldPath: metadata.name
-    - name: MY_POD_NAMESPACE
-      valueFrom:
-        fieldRef:
-          apiVersion: v1
-          fieldPath: metadata.namespace
-    - name: MY_POD_IP
-      valueFrom:
-        fieldRef:
-          apiVersion: v1
-          fieldPath: status.podIP
+conjurContainerConfig:
+  - name: *conjurContainerName
+    image: *containerImage
+    env:
+      - name: MY_POD_NAME
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.name
+      - name: MY_POD_NAMESPACE
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: metadata.namespace
+      - name: MY_POD_IP
+        valueFrom:
+          fieldRef:
+            apiVersion: v1
+            fieldPath: status.podIP
+      - name: CONTAINER_MODE
+        value: *conjurMode
+      - name: authnName
+        value: *conjurAuthnName
+      - name: CONJUR_AUTHN_URL
+        value: *conjurAuthnUrl
+      - name: CONJUR_AUTHN_LOGIN
+        value: *conjurAuthnLogin
+    envFrom:
+    - configMapRef:
+        name: conjur-connection
+    volumeMounts:
+      - name: conjur-access-token
+        mountPath: /run/conjur
 
 initContainers: []
 

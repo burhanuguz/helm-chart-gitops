@@ -35,45 +35,15 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- if and .Values.conjur.enabled (deepEqual "init" .Values.conjur.mode) }}
-        - name: {{ .Values.conjur.conjurContainerName }}
-          image: {{ .Values.conjur.containerImage }}
-          envFrom:
-          {{- toYaml .Values.conjurContainerConfig.envFrom | nindent 10 }}
-          volumeMounts:
-          {{- toYaml .Values.conjurContainerConfig.volumeMounts | nindent 10 }}
-          env:
-          {{- toYaml .Values.conjurContainerConfig.env | nindent 10 }}
-          - name: CONTAINER_MODE
-            value: "init"
-          - name: authnName
-            value: {{ .Values.conjur.authnName }}
-          - name: CONJUR_AUTHN_URL
-            value: {{ .Values.conjur.CONJUR_AUTHN_URL }}
-          - name: CONJUR_AUTHN_LOGIN
-            value: {{ .Values.conjur.CONJUR_AUTHN_LOGIN }}
+        {{- toYaml .Values.conjurContainerConfig | nindent 8 }}
       {{- end }}
       containers:
       {{- if and .Values.conjur.enabled (deepEqual "sidecar" .Values.conjur.mode) }}
-        - name: {{ .Values.conjur.conjurContainerName }}
-          image: {{ .Values.conjur.containerImage }}
-          envFrom:
-          {{- toYaml .Values.conjurContainerConfig.envFrom | nindent 10 }}
-          volumeMounts:
-          {{- toYaml .Values.conjurContainerConfig.volumeMounts | nindent 10 }}
-          env:
-          {{- toYaml .Values.conjurContainerConfig.env | nindent 10 }}
-          - name: CONTAINER_MODE
-            value: "sidecar"
-          - name: authnName
-            value: {{ .Values.conjur.authnName }}
-          - name: CONJUR_AUTHN_URL
-            value: {{ .Values.conjur.CONJUR_AUTHN_URL }}
-          - name: CONJUR_AUTHN_LOGIN
-            value: {{ .Values.conjur.CONJUR_AUTHN_LOGIN }}
+        {{- toYaml .Values.conjurContainerConfig | nindent 8 }}
       {{- end }}
       {{- with .Values.sidecarContainers }}
           {{- toYaml . | nindent 8 }}
-      {{- end }}       
+      {{- end }}
         - name: {{ include "deploypackage.fullname" . }}
           {{- with .Values.extraFields }}
             {{- toYaml . | nindent 10 }}
@@ -140,4 +110,3 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-

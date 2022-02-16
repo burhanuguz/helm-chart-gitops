@@ -13,7 +13,7 @@ spec:
     name: {{ include "deploypackage.fullname" . }}
     weight: 100
   port:
-    targetPort: http
+    targetPort: {{ .Values.route.targetServicePort }}
   tls:
     termination: edge
     insecureEdgeTerminationPolicy: Allow
