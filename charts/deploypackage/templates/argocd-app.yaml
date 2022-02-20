@@ -9,7 +9,7 @@ spec:
     namespace: {{ .Release.Namespace }}
   project: default
   source:
-    path: {{ .Release.Namespace }}/{{ include "deploypackage.fullname" . }}
+    path: namespaces/{{ .Release.Namespace }}/{{ include "deploypackage.fullname" . }}
     repoURL: {{ .Values.mainRepo }}
     targetRevision: {{ .Values.mainRevision }}
   syncPolicy:
@@ -19,3 +19,4 @@ spec:
     retry:
       backoff:
         duration: 5s
+

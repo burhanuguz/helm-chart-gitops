@@ -3,9 +3,9 @@ entries:
   deploypackage:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-02-16T06:32:55.401399351Z"
+    created: "2022-02-20T14:49:50.189997212Z"
     description: A Helm chart for Kubernetes
-    digest: 5592fcda760be8a868d66aac4731ce7c4f483355f8cb9ec97b042cf1b49d31a0
+    digest: 2d177b0d258c2b23432ec4cac0d37f9f0d442a7f533957566fcaf450fa087220
     name: deploypackage
     type: application
     urls:
@@ -13,7 +13,7 @@ entries:
     version: 0.1.2
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-02-16T06:32:55.400733245Z"
+    created: "2022-02-20T14:49:50.189343481Z"
     description: A Helm chart for Kubernetes
     digest: 0562de5a3d231a9e0b9f44af7cf462e72bf53f90a313dec9feac26d0d1110f8b
     name: deploypackage
@@ -23,7 +23,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-02-16T06:32:55.400141851Z"
+    created: "2022-02-20T14:49:50.188862721Z"
     description: A Helm chart for Kubernetes
     digest: aa463b87edab4b2f08c930a1278897f929642dd4660d3aa1126ef628fd95d19e
     name: deploypackage
@@ -34,9 +34,9 @@ entries:
   new-namespace:
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-02-16T06:32:55.40211579Z"
+    created: "2022-02-20T14:49:50.190693364Z"
     description: A Helm chart for Kubernetes
-    digest: 923a0c9e4624e6270bad76fabbd3e4f777c7a860708516f8b171025b3031862b
+    digest: b88fa6fbd30b9234b30052896c1ae9c92b75abf1ef3a0fa8dfbdf44881f4bd1c
     name: new-namespace
     type: application
     urls:
@@ -44,7 +44,7 @@ entries:
     version: 0.1.1
   - apiVersion: v2
     appVersion: 1.16.0
-    created: "2022-02-16T06:32:55.401788496Z"
+    created: "2022-02-20T14:49:50.190331261Z"
     description: A Helm chart for Kubernetes
     digest: 59908727c648c5e8614be29937b6c777c63f7b5c1ce3466d5cbf35d3d87b645c
     name: new-namespace
@@ -52,4 +52,4 @@ entries:
     urls:
     - https://burhanuguz.github.io/helm-chart-gitops/new-namespace-0.1.0.tgz
     version: 0.1.0
-generated: "2022-02-16T06:32:55.399397095Z"
+generated: "2022-02-20T14:49:50.188039669Z"

@@ -38,3 +38,4 @@ conjurConnectionConfig:
   CONJUR_ACCOUNT: ""
   CONJUR_AUTHN_TOKEN_FILE: ""
   CONJUR_SSL_CERTIFICATE: ""
+

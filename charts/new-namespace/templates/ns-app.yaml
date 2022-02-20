@@ -9,9 +9,9 @@ spec:
     namespace: {{ include "new-namespace.fullname" . }}
   project: default
   source:
-    path: {{ include "new-namespace.fullname" . }}
+    path: namespaces/{{ include "new-namespace.fullname" . }}
     repoURL: {{ .Values.mainRepo }}
-    targetRevision: cluster-apps
+    targetRevision: master
   syncPolicy:
     automated:
       prune: true
@@ -19,3 +19,4 @@ spec:
     retry:
       backoff:
         duration: 5s
+
