@@ -12,10 +12,6 @@ image:
 
 imagePullSecrets: []
 
-nameOverride: ""
-
-fullnameOverride: ""
-
 istio:
   enabled: false
 
@@ -91,7 +87,7 @@ service:
     name: *referencedPortName
 
 route:
-  enabled: true
+  enabled: false
   targetServicePort: *referencedPortName
 
 ingress:
