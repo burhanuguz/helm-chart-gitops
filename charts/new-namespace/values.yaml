@@ -31,11 +31,14 @@ limits:
     memory: 2100Mi
 
 conjur:
-  enabled: true
+  enabled: false
 
 conjurConnectionConfig:
   CONJUR_APPLIANCE_URL: ''
   CONJUR_ACCOUNT: ""
   CONJUR_AUTHN_TOKEN_FILE: ""
-  CONJUR_SSL_CERTIFICATE: ""
+  CONJUR_SSL_CERTIFICATE: |
+    -----BEGIN CERTIFICATE-----
+    ................................................................
+    -----END CERTIFICATE-----
 

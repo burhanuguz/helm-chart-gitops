@@ -1,7 +1,8 @@
+{{- if .Values.conjur.enabled -}}
 kind: ConfigMap
 apiVersion: v1
 metadata:
   name: conjur-connection
 data:
   {{- toYaml .Values.conjurConnectionConfig | nindent 2 }}
-
+{{- end }}
