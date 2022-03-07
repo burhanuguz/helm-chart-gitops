@@ -4,17 +4,51 @@
 
 replicaCount: 1
 
+## Specify an imagePullPolicy (Required)
+## It's recommended to change this to 'Always' if the image tag is 'latest'
+## ref: http://kubernetes.io/docs/user-guide/images/#updating-images
 image:
   repository: nginx
   pullPolicy: Always
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: "latest"
+  tag: "5.7.30"
 
+## Set strategy for deployment
+strategy:
+  rollingUpdate:
+    maxSurge: 1
+    maxUnavailable: 1
+    #maxSurge: 25%
+    #maxUnavailable: 25%
+#strategy:
+#  type: Recreate
+
+## please add approprite label name
+labels:
+  team: myteam@greentube.com
+  env: prod  
+
+# Optionally specify an array of imagePullSecrets.
+# Secrets must be manually created in the namespace.
+# ref: https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
 imagePullSecrets: []
+# - name: myRegistryKeySecretName
 
+## Additionnal arguments that are passed to the container.
+args: []
+  #- "-xms=10m -xmx=100m"
+
+## Additionnal arguments that are passed to the container.
+command: []
+  #- "bin/bash"
+  #- "-c"
+  #- "touch /tmp/healthy; touch /tmp/liveness; while true; do echo .; sleep 1; done"
+
+## enable istio sidecar
 istio:
   enabled: false
 
+## Pods Service Account
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
 serviceAccount:
   # Specifies whether a service account should be created
   create: false
@@ -24,11 +58,24 @@ serviceAccount:
   # If not set and create is true, a name is generated using the fullname template
   name: "default"
 
+## if you have set annotation
+## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
 podAnnotations: {}
+  #haproxy.router.openshift.io/disable_cookies: 'true'
+  #haproxy.router.openshift.io/balance: 'leastconn'
+  #haproxy.router.openshift.io/timeout: 5s
 
+
+## Pod level security Context
 podSecurityContext: {}
   # fsGroup: 2000
+  # capabilities:
+  #   drop:
+  #   - ALL
+  # runAsNonRoot: true
+  # runAsUser: 1000
 
+## Container level security Context
 securityContext: {}
   # capabilities:
   #   drop:
@@ -37,14 +84,15 @@ securityContext: {}
   # runAsNonRoot: true
   # runAsUser: 1000
 
+## Configure container port
+## ref: https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#exposing-pods-to-the-cluster
 ports:
-   - name: &referencedPortName http
-     containerPort: &referencedPort 8080
-     protocol: TCP
-  # - name: debug
-  #   containerPort: 5005
-  #   protocol: TCP
+  - name: &referencedPortName http
+    containerPort: &referencedPort 8080
+    protocol: TCP
 
+## Configure container probe
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#define-startup-probes
 livenessProbe: []
   # httpGet:
   #   path: /
@@ -53,6 +101,7 @@ livenessProbe: []
   # initialDelaySeconds: 5
   # periodSeconds: 10
   # successThreshold: 1
+  # timeoutSeconds: 5
 ####### OR #######
   # tcpSocket:
   #   port: *referencedPortName
@@ -60,6 +109,7 @@ livenessProbe: []
   # initialDelaySeconds: 5
   # periodSeconds: 10
   # successThreshold: 1
+  # timeoutSeconds: 5
 
 readinessProbe: []
   # httpGet:
@@ -69,6 +119,7 @@ readinessProbe: []
   # initialDelaySeconds: 5
   # periodSeconds: 10
   # successThreshold: 1
+  # timeoutSeconds: 5
 ####### OR #######
   # tcpSocket:
   #   port: *referencedPortName
@@ -76,8 +127,20 @@ readinessProbe: []
   # initialDelaySeconds: 5
   # periodSeconds: 10
   # successThreshold: 1
+  # timeoutSeconds: 5
 
+startupProbe: []
+  #httpGet:
+  #  path: /healthz
+  #  port: *referencedPortName
+  # failureThreshold: 10
+  # initialDelaySeconds: 5
+  # periodSeconds: 10
+  # successThreshold: 1
+  # timeoutSeconds: 5
 
+## Configure the service
+## ref: http://kubernetes.io/docs/user-guide/services/
 service:
   type: ClusterIP
   ports:
@@ -86,9 +149,15 @@ service:
     protocol: TCP
     name: *referencedPortName
 
+## Configure openshift route
+## ref: http://kubernetes.io/docs/user-guide/services/
 route:
   enabled: false
   targetServicePort: *referencedPortName
+  tls:
+    termination: passthrough
+    insecureEdgeTerminationPolicy: Allow
+    wildcardPolicy: None
 
 ingress:
   enabled: false
@@ -106,18 +175,18 @@ ingress:
   #    hosts:
   #      - chart-example.local
 
+## Configure resource requests and limits
+## ref: http://kubernetes.io/docs/user-guide/compute-resources/
 resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
+   #limits:
+   #  cpu: 100m
+   #  memory: 128Mi
+   #requests:
+   #  cpu: 100m
+   #  memory: 128Mi
 
+## Pod autoscaling
+## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
 autoscaling:
   enabled: false
   minReplicas: 1
@@ -125,21 +194,118 @@ autoscaling:
   targetCPUUtilizationPercentage: 80
   # targetMemoryUtilizationPercentage: 80
 
+## Node selector
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#nodeselector
 nodeSelector: {}
+  #disktype: ssd
 
+## Tolerations for pod assignment
+## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
 tolerations: []
+  #- key: "example-key"
+  #  operator: "Exists"
+  #  effect: "NoSchedule"
 
+## Affinity
+## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
 affinity: {}
+  #nodeAffinity:
+  #  requiredDuringSchedulingIgnoredDuringExecution:
+  #    nodeSelectorTerms:
+  #    - matchExpressions:
+  #      - key: kubernetes.io/e2e-az-name
+  #        operator: In
+  #        values:
+  #        - e2e-az1
+  #podAffinity:
+  #  requiredDuringSchedulingIgnoredDuringExecution:
+  #  - labelSelector:
+  #      matchExpressions:
+  #      - key: security
+  #        operator: In
+  #        values:
+  #        - S1
+  #    topologyKey: topology.kubernetes.io/zone
+  #podAntiAffinity:
+  #  preferredDuringSchedulingIgnoredDuringExecution:
+  #  - weight: 100
+  #    podAffinityTerm:
+  #      labelSelector:
+  #        matchExpressions:
+  #        - key: security
+  #          operator: In
+  #          values:
+  #          - S2
 
+## pod envFrom
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables 
 envFrom: []
+  #- configMapRef:
+  #    name: special-config
+  #- secretRef:
+  #    name: special-config
 
+## pod env
+## ref: https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/#define-an-environment-variable-for-a-container
 env: []
+#- name: DEMO_GREETING
+#  value: "Hello from the environment"
+#- name: DEMO_FAREWELL
+#  value: "Such a sweet sorrow"
+
+## pod volume and volumemount
+## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-persistent-volume-storage/#create-a-pod
+volumes: []
+  #- name: task-pv-storage
+  #  persistentVolumeClaim:
+  #    claimName: task-pv-claim
 
 volumeMounts: []
+  #- mountPath: "/usr/share/nginx/html"
+  #  name: task-pv-storage
 
-volumes: []
 
+## add initContainers
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/#init-containers-in-use
+initContainers: []
+  #- name: init-myservice
+  #  image: busybox:1.28
+  #  command: ['sh', '-c', "until nslookup myservice.$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace).svc.cluster.local; do echo waiting for myservice; sleep 2; done"]
+
+## add sidecarContainers
+sidecarContainers: []
+  #- name: nginx
+  #  image: nginx:1.14.2
+  #  ports:
+  #  - containerPort: 80
+
+## if you add special parameter under the main container (lifecycle,hostAliases,hostPID, hostIPC,hostNetwork..etc)
 extras: []
+  #lifecycle:
+  #  postStart:
+  #    exec:
+  #      command: ["/bin/sh", "-c", "cat /hosts >> /etc/hosts"]
+  #--------------
+  #hostAliases:
+  #- ip: "127.0.0.1"
+  #  hostnames:
+  #  - "foo.local"
+  #  - "bar.local"
+
+## Persist data to a persistent volume
+persistence:
+  enabled: true
+  ## database data Persistent Volume Storage Class
+  ## If defined, storageClassName: <storageClass>
+  ## If set to "-", storageClassName: "", which disables dynamic provisioning
+  ## If undefined (the default) or set to null, no storageClassName spec is
+  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+  ##   GKE, AWS & OpenStack)
+  ##
+  # storageClass: "-"
+  accessMode: ReadWriteOnce
+  size: 4Gi
+  annotations: {}
 
 conjur:
   enabled: false
@@ -183,8 +349,3 @@ conjurContainerConfig:
     volumeMounts:
       - name: conjur-access-token
         mountPath: /run/conjur
-
-initContainers: []
-
-sidecarContainers: []
-

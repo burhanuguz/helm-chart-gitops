@@ -4,7 +4,12 @@ metadata:
   name: {{ include "deploypackage.fullname" . }}
   labels:
     {{- include "deploypackage.labels" . | nindent 4 }}
+    {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}  
 spec:
+  strategy:
+  {{- toYaml .Values.strategy | nindent 4  }}
   {{- if not .Values.autoscaling.enabled }}
   replicas: {{ .Values.replicaCount }}
   {{- end }}
@@ -52,6 +57,10 @@ spec:
             {{- toYaml .Values.securityContext | nindent 12 }}
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          args:
+          {{- toYaml .Values.args | nindent 13 }}
+          command:
+          {{- toYaml .Values.command | nindent 13 }}
           envFrom:
           {{- with .Values.envFrom }}
             {{- toYaml . | nindent 12 }}
@@ -74,6 +83,10 @@ spec:
           {{- end }}
           {{- with .Values.readinessProbe }}
           readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.startupProbe }}
+          startupProbe:
             {{- toYaml . | nindent 12 }}
           {{- end }}
           resources:
@@ -110,4 +123,3 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-
