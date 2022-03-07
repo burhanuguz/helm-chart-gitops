@@ -1,4 +1,4 @@
-## set repl'caset
+## set replicaset
 replicaCount: 1
 
 ## set namespace name
