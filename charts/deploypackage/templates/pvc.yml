@@ -4,8 +4,10 @@ apiVersion: v1
 metadata:
   name: {{ include "deploypackage.fullname" . }}
   labels:
-    app: {{ include "deploypackage.fullname" . }}
-    release: {{ .Release.Name | quote }}
+    {{- include "deploypackage.labels" . | nindent 4 }}
+    {{- range $key, $value := .Values.labels }}
+    {{ $key }}: {{ $value | quote }}
+    {{- end }}
 {{- if .Values.persistence.labels }}
 {{ toYaml .Values.persistence.labels | indent 4 }}
 {{- end }}
