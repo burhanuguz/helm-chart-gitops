@@ -1,8 +1,8 @@
-# Default values for deploypackage.
-# This is a YAML-formatted file.
-# Declare variables to be passed into your templates.
-
+## set repl'caset
 replicaCount: 1
+
+## set namespace name
+namespace: lab
 
 ## Specify an imagePullPolicy (Required)
 ## It's recommended to change this to 'Always' if the image tag is 'latest'
