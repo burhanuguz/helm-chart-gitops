@@ -7,7 +7,6 @@ metadata:
     {{- range $key, $value := .Values.labels }}
     {{ $key }}: {{ $value | quote }}
     {{- end }}
-  namespace: {{ .Values.namespace }}
 spec:
   strategy:
   {{- toYaml .Values.strategy | nindent 4  }}
